@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso al Sistema - Tiendita</title>
+    <!-- Carga de Tailwind CSS para un diseño moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Fondo gris claro */
+        }
+        /* Estilos para mensajes Flash de error/info */
+        .flash-error { 
+            background-color: #fee2e2; 
+            border-color: #f87171; 
+            color: #991b1b; 
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- Contenedor Principal del Login -->
+    <div class="w-full max-w-md bg-white rounded-xl shadow-2xl p-8 space-y-6">
+
+        <h1 class="text-3xl font-extrabold text-indigo-700 text-center">
+            Iniciar Sesión
+        </h1>
+        <!-- Aviso sobre las credenciales temporales (si no hay tabla de usuarios) -->
+        <p class="text-sm text-center text-red-500 font-bold">
+            *** Aviso: Usando credenciales de prueba (test/testpass) ***
+        </p>
+        <p class="text-sm text-center text-gray-500">
+            Ingresa tus credenciales para acceder a la gestión de compras.
+        </p>
+
+        <!-- Mensajes Flash de Flask (Errores o mensajes de sesión cerrada) -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == 'error' or category == 'info' %}
+                        <!-- Renderiza mensajes de error y de información de logout -->
+                        <div class="flash-error border px-4 py-3 rounded-lg relative font-medium text-sm" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Formulario que envía los datos a la ruta /login de logshinee.py -->
+        <!-- ACTION: {{ url_for('login') }} apunta a la función login en tu script Flask -->
+        <form action="{{ url_for('login') }}" method="POST" class="space-y-4">
+            
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Usuario</label>
+                <input type="text" id="username" name="username" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out"
+                       placeholder="Nombre de usuario"
+                       autocomplete="username">
+            </div>
+            
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+                <input type="password" id="password" name="password" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out"
+                       placeholder="Contraseña"
+                       autocomplete="current-password">
+            </div>
+            
+            <button type="submit"
+                    class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-indigo-700 transition duration-300 ease-in-out shadow-lg">
+                Acceder
+            </button>
+        </form>
+    </div>
+
+</body>
+</html>
